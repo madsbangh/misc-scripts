@@ -1,0 +1,1 @@
+& 'C:\Program Files\Unity_2017.1\Editor\Unity.exe' -projectPath (get-location) > $null
