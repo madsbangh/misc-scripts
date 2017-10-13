@@ -1,4 +1,4 @@
-$UnityPath = 'C:\Program Files\Unity_2017.1\Editor\Unity.exe'
+$UnityPath = 'C:\Program Files\Unity_2017.2\Editor\Unity.exe'
 
 # Is this a unity project?
 if (Test-Path ./Assets)
