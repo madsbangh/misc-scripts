@@ -1,0 +1,1 @@
+﻿git log --format="%aN" | sort -u | foreach {git log --format="%aN %s" --author=$_ --since="1 day ago"}
