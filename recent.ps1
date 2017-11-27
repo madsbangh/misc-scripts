@@ -1,19 +1,23 @@
 ﻿param
 (
     [switch] $Hash,
-    [switch] $NoName,
+    [switch] $Name,
     [switch] $RelTime,
     [switch] $AbsTime,
+    [switch] $Headers,
     [int] $Days = 1
 )
 
-if ($NoName)
+$format = ""
+
+if ($Headers)
 {
-    $format = ""
+    $format += "    "
 }
-else
+
+if ($Name)
 {
-    $format = "%aN"
+    $format += "%aN"
 }
 
 if ($AbsTime)
@@ -26,7 +30,7 @@ if ($RelTime)
     $format += " (%ar)"
 }
 
-if ($format -ne "")
+if ($format -ne "" -and $format -ne "    ")
 {
     $format += ": "
 }
@@ -38,4 +42,4 @@ if ($Hash)
     $format += " (%h)"
 }
 
-git log --format="%aN" | sort -u | foreach {git log --format="$format" --author=$_ --since="$days days ago" --no-merges; echo ""}
+git log --format="%aN" | sort -u | foreach {if($Headers){echo "$_"} git log --format="$format" --author=$_ --since="$days days ago" --no-merges; echo ""}
