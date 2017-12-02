@@ -4,13 +4,13 @@
     [switch] $Name,
     [switch] $RelTime,
     [switch] $AbsTime,
-    [switch] $Headers,
+    [switch] $Titles,
     [int] $Days = 1
 )
 
 $format = ""
 
-if ($Headers)
+if ($Titles)
 {
     $format += "    "
 }
@@ -42,4 +42,4 @@ if ($Hash)
     $format += " (%h)"
 }
 
-git log --format="%aN" | sort -u | foreach {if($Headers){echo "$_"} git log --format="$format" --author=$_ --since="$days days ago" --no-merges; echo ""}
+git log --format="%aN" | sort -u | foreach {if($Titles){echo "$_"} git log --format="$format" --author=$_ --since="$days days ago" --no-merges; echo ""}
