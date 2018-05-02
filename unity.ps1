@@ -1,4 +1,5 @@
 $UnityPaths = @{
+'m_EditorVersion: 2018.1.0b10' = 'C:\Program Files\Unity_2018.1\Editor\Unity.exe';
 'm_EditorVersion: 2017.3.1f1' = 'C:\Program Files\Unity_2017.3\Editor\Unity.exe';
 'm_EditorVersion: 5.6.3p1' = 'C:\Program Files\Unity_5.6.3p1\Editor\Unity.exe'
 }
