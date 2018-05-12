@@ -1,6 +1,7 @@
 param
 (
-    [switch] $ForceNewest = $false
+    [switch] $ForceNewest = $false,
+    [switch] $Launcher = $false
 )
 
 $UnityPaths = @{
@@ -13,7 +14,7 @@ $UnityPaths = @{
 $UnityPath = $UnityPaths.Values | select -First 1
 
 # Is this a unity project?
-if (Test-Path '.\Assets')
+if ((-not $Launcher) -and (Test-Path '.\Assets'))
 {
     # Set project path to current dir
     $args += '-projectPath (get-location)'
