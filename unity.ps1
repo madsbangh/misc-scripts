@@ -1,3 +1,8 @@
+param
+(
+    [switch] $ForceNewest = $false
+)
+
 $UnityPaths = @{
 'm_EditorVersion: 2018.1.0b10' = 'C:\Program Files\Unity_2018.1\Editor\Unity.exe';
 'm_EditorVersion: 2017.3.1f1' = 'C:\Program Files\Unity_2017.3\Editor\Unity.exe';
@@ -8,16 +13,19 @@ $UnityPaths = @{
 $UnityPath = $UnityPaths.Values | select -First 1
 
 # Is this a unity project?
-if (Test-Path ./Assets)
+if (Test-Path '.\Assets')
 {
     # Set project path to current dir
     $args += '-projectPath (get-location)'
 
     # Test Unity version
-    $ProjectVersion = Get-Content '.\ProjectSettings\ProjectVersion.txt'
-    if ($UnityPaths.ContainsKey($ProjectVersion))
+    if ((-not $ForceNewest) -and (Test-Path '.\ProjectSettings\ProjectVersion.txt'))
     {
-        $UnityPath = $UnityPaths[$ProjectVersion]
+        $ProjectVersion = Get-Content '.\ProjectSettings\ProjectVersion.txt'
+        if ($UnityPaths.ContainsKey($ProjectVersion))
+        {
+            $UnityPath = $UnityPaths[$ProjectVersion]
+        }
     }
 }
 
