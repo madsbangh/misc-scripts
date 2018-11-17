@@ -1,4 +1,4 @@
-﻿function Set-Example {
+function Set-Example {
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory)]

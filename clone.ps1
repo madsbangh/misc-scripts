@@ -1,4 +1,4 @@
-﻿param
+param
 (
     $Repo,
     $User = "madsbangh"
