@@ -10,8 +10,8 @@ function Start-Unity
 {
     [CmdletBinding()]
     param (
-        [string]$ArgsString,
-        [switch]$ListVersions
+        [string] $ArgsString,
+        [switch] $ListVersions
     )
     
     DynamicParam
@@ -68,13 +68,69 @@ function Start-Unity
             {
                 # Test project Unity version
                 $ProjectVersion = (Get-Content '.\ProjectSettings\ProjectVersion.txt').Replace('m_EditorVersion: ', '')
-                if ($UnityPaths.ContainsKey($ProjectVersion))
-                {
-                    $UnityPath = $UnityPaths[$ProjectVersion]
-                }
+                $UnityPath = $UnityPaths[(Get-ClosestUnityVersion $ProjectVersion)]
             }
             # Start unity with args
             Invoke-Expression "& '$UnityPath' $ArgsString" | Out-Null
         }
+    }
+}
+
+function Get-ClosestUnityVersion
+{
+	[CmdletBinding()]
+	param (
+		[Parameter(Position=0, Mandatory=$true)]
+		[string] $Version
+	)
+	
+	$HighestVersion = "0.0.0.0"
+	$ClosestVersion = "99999.99999.99999.99999"
+	$Keys = ($UnityPaths.Keys).Split()
+	foreach ($v in $Keys)
+	{
+		$cv = (Convert-FromUnityVersion $v)
+		if ($cv -ge (Convert-FromUnityVersion $Version))
+		{
+			if ($cv -le (Convert-FromUnityVersion $ClosestVersion))
+			{
+				$ClosestVersion = $v
+			}
+		}
+		if ($cv -ge (Convert-FromUnityVersion $HighestVersion))
+		{
+			$HighestVersion = $v
+		}
+	}
+
+	if ($ClosestVersion -eq "99999.99999.99999.99999")
+	{
+		return $HighestVersion
+	}
+
+	return $ClosestVersion
+}
+
+function Convert-FromUnityVersion
+{
+	[CmdletBinding()]
+	param (
+		[Parameter(Position=0, Mandatory=$true)]
+		[string] $VersionString
+	)
+
+	$parseableVersion = $VersionString -Replace "[a-z]","."
+	return [Version]$parseableVersion
+}
+
+function Get-UnityVersion
+{
+	[CmdletBinding()]
+	param (
+	
+	)
+	if (Test-Path '.\ProjectSettings\ProjectVersion.txt')
+    {
+        return (Get-Content '.\ProjectSettings\ProjectVersion.txt').Replace('m_EditorVersion: ', '')
     }
 }
