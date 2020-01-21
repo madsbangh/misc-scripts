@@ -67,7 +67,7 @@ function Start-Unity
             elseif (Test-Path '.\ProjectSettings\ProjectVersion.txt')
             {
                 # Test project Unity version
-                $ProjectVersion = (Get-Content '.\ProjectSettings\ProjectVersion.txt').Replace('m_EditorVersion: ', '')
+                $ProjectVersion = (Get-UnityVersion)
                 $UnityPath = $UnityPaths[(Get-ClosestUnityVersion $ProjectVersion)]
             }
             # Start unity with args
@@ -131,6 +131,6 @@ function Get-UnityVersion
 	)
 	if (Test-Path '.\ProjectSettings\ProjectVersion.txt')
     {
-        return (Get-Content '.\ProjectSettings\ProjectVersion.txt').Replace('m_EditorVersion: ', '')
+        return (Get-Content '.\ProjectSettings\ProjectVersion.txt' | Select-String "^m_EditorVersion: (.+)$").Matches.Groups[1].Value
     }
 }
