@@ -20,4 +20,6 @@ function Get-LFSObjectPath($OID) {
 
 
 $OIDs = Get-OIDs $File
-git diff --no-index -- (Get-LFSObjectPath($OIDs.Old)) (Get-LFSObjectPath($OIDs.New))
+$OldPath = Get-LFSObjectPath($OIDs.Old)
+$NewPath = Get-LFSObjectPath($OIDs.New)
+git diff --no-index -- "$OldPath" "$NewPath"
