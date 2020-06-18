@@ -3,8 +3,8 @@ $HubEditorsPath = 'C:\Program Files\Unity\Hub\Editor'
 $EditorsPath = 'C:\Program Files\Unity\'
 
 $UnityPaths = @{}
-foreach ($Dir in ls $EditorsPath) { if ($Dir.Name -ne "Hub") {$UnityPaths.Add($Dir.Name, $Dir.FullName + "\Editor\Unity.exe")} }
-foreach ($Dir in ls $HubEditorsPath) { $UnityPaths.Add($Dir.Name, $Dir.FullName + "\Editor\Unity.exe") }
+foreach ($Dir in Get-ChildItem $EditorsPath) { if ($Dir.Name -ne "Hub") {$UnityPaths.Add($Dir.Name, $Dir.FullName + "\Editor\Unity.exe")} }
+foreach ($Dir in Get-ChildItem $HubEditorsPath) { $UnityPaths.Add($Dir.Name, $Dir.FullName + "\Editor\Unity.exe") }
 
 function Start-Unity
 {
@@ -57,7 +57,7 @@ function Start-Unity
             $ArgsString = '-projectPath (get-location) ' + $ArgsString
 
             # Default Unity Path
-            $UnityPath = $UnityPaths.Values | sort | select -First 1
+            $UnityPath = $UnityPaths.Values | Sort-Object | Select-Object -First 1
 
             # Has user defined version?
             if ($PSBoundParameters.UnityVersion)
