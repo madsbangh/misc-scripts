@@ -1,5 +1,5 @@
 $pacname = $args[0]
-if ($pacname -eq $null)
+if ($null -eq $pacname)
 {
     $pacname = (Get-PackageName)
 }
