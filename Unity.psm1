@@ -11,7 +11,8 @@ function Start-Unity
     [CmdletBinding()]
     param (
         [string] $ArgsString,
-        [switch] $ListVersions
+        [switch] $ListVersions,
+        $ProjectPath
     )
     
     DynamicParam
@@ -46,15 +47,26 @@ function Start-Unity
             return $UnityPaths
         }
 
+        if ($null -eq $ProjectPath)
+        {
+            $ProjectPath = Get-Location
+        }
+        else
+        {
+            $ProjectPath = Resolve-Path $ProjectPath
+        }
+
         # Does user want the Hub or is this not a unity project?
-        if ($PSBoundParameters.Hub -or !(Test-Path '.\Assets'))
+        $AssetsPath = Join-Path $ProjectPath "Assets"
+        $ProjectSettingsPath = Join-Path $ProjectPath "ProjectSettings"
+        if ($PSBoundParameters.Hub -or !((Test-Path $AssetsPath) -and (Test-Path $ProjectSettingsPath)))
         {
             & $HubPath | Out-Null
         }
         else
         {
             # Set project path to current dir
-            $ArgsString = '-projectPath (get-location) ' + $ArgsString
+            $ArgsString = "-projectPath `"$ProjectPath`" " + $ArgsString
 
             # Default Unity Path
             $UnityPath = $UnityPaths.Values | Sort-Object | Select-Object -First 1
@@ -64,10 +76,10 @@ function Start-Unity
             {
                 $UnityPath = $UnityPaths[$PSBoundParameters.UnityVersion]
             }
-            elseif (Test-Path '.\ProjectSettings\ProjectVersion.txt')
+            elseif (Test-Path (Join-Path $ProjectSettingsPath "ProjectVersion.txt"))
             {
                 # Test project Unity version
-                $ProjectVersion = (Get-UnityVersion)
+                $ProjectVersion = (Get-UnityVersion -ProjectPath $ProjectPath)
                 $UnityPath = $UnityPaths[(Get-ClosestUnityVersion $ProjectVersion)]
             }
             # Start unity with args
@@ -127,10 +139,22 @@ function Get-UnityVersion
 {
 	[CmdletBinding()]
 	param (
-	
-	)
-	if (Test-Path '.\ProjectSettings\ProjectVersion.txt')
+        $ProjectPath
+    )
+    
+    if ($null -eq $ProjectPath)
     {
-        return (Get-Content '.\ProjectSettings\ProjectVersion.txt' | Select-String "^m_EditorVersion: (.+)$").Matches.Groups[1].Value
+        $ProjectPath = Get-Location
+    }
+    else
+    {
+        $ProjectPath = Resolve-Path $ProjectPath
+    }
+
+    $ProjectVersionPath = Join-Path $ProjectPath "ProjectSettings\ProjectVersion.txt"
+
+	if (Test-Path $ProjectVersionPath)
+    {
+        return (Get-Content $ProjectVersionPath | Select-String "^m_EditorVersion: (.+)$").Matches.Groups[1].Value
     }
 }
