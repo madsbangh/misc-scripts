@@ -10,9 +10,9 @@ function Start-Unity
 {
     [CmdletBinding()]
     param (
+        $ProjectPath,
         [string] $ArgsString,
-        [switch] $ListVersions,
-        $ProjectPath
+        [switch] $ListVersions
     )
     
     DynamicParam
