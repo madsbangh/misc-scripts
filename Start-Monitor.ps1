@@ -1,0 +1,1 @@
+. ((Get-Command adb).Source | Split-Path | Split-Path | Join-Path -ChildPath "tools\monitor.bat")
