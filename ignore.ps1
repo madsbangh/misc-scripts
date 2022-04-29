@@ -1,7 +1,7 @@
 param
 (
     [Parameter(Position=0, Mandatory=$True)]
-    [ValidateSet("Unity", IgnoreCase=$False)]
+    [ValidateSet("Unity", "Python", IgnoreCase=$False)]
     [String]
     $Template
 )
