@@ -5,4 +5,4 @@ param
     [String]
     $Template
 )
-Invoke-WebRequest "https://github.com/alexkaratarakis/gitattributes/blob/master/$Template.gitattributes" -OutFile ./.gitattributes
+Invoke-WebRequest "https://raw.githubusercontent.com/alexkaratarakis/gitattributes/master/$Template.gitattributes" -OutFile ./.gitattributes
