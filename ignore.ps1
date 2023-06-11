@@ -1,8 +1,7 @@
 param
 (
     [Parameter(Position=0, Mandatory=$True)]
-    [ValidateSet("Unity", "Python", IgnoreCase=$False)]
     [String]
-    $Template
+    $Language
 )
-Invoke-WebRequest "https://raw.githubusercontent.com/github/gitignore/master/$Template.gitignore" -OutFile ./.gitignore
+Invoke-WebRequest "https://raw.githubusercontent.com/github/gitignore/master/$Language.gitignore" -OutFile ./.gitignore
