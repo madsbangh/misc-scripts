@@ -6,6 +6,23 @@ $UnityPaths = @{}
 foreach ($Dir in Get-ChildItem $EditorsPath) { if ($Dir.Name -ne "Hub") { $UnityPaths.Add($Dir.Name, $Dir.FullName + "\Editor\Unity.exe") } }
 foreach ($Dir in Get-ChildItem $HubEditorsPath) { $UnityPaths.Add($Dir.Name, $Dir.FullName + "\Editor\Unity.exe") }
 
+function Add-UnityAndroidToolsToPath {
+    foreach ($unityPath in ($UnityPaths.Values | Sort-Object -Descending)) {
+        if ($unityPath -cmatch "(.+)\\Unity.exe$") {
+            $sdkSubPath = "Data\PlaybackEngines\AndroidPlayer\SDK"
+            $editorFolder = $Matches[1]
+            if (Test-Path "$editorFolder\$sdkSubPath\build-tools") {
+                Get-ChildItem "$editorFolder\$sdkSubPath\build-tools" | ForEach-Object {
+                    $env:Path += ";$($_.FullName)"
+                }
+            }
+            if (Test-Path "$editorFolder\$sdkSubPath\platform-tools") {
+                $env:Path += ";$editorFolder\$sdkSubPath\platform-tools"
+            }
+        }
+    }
+}
+
 function Get-UnityVersions {
     return $UnityPaths
 }
