@@ -1,1 +1,1 @@
-ls | foreach {echo $_.Name; echo "$((((ls -Recurse $_ -ErrorAction Ignore) | measure -Sum Length -ErrorAction Ignore | select -ExpandProperty Sum) / 1gb).ToString('0.##')) GB" }
+ls -Directory | foreach { echo $_.Name; echo "$((((ls -Recurse $_ -ErrorAction Ignore) | measure -Sum Length -ErrorAction Ignore | select -ExpandProperty Sum) / 1gb).ToString('0.##')) GB" }
