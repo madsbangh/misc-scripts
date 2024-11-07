@@ -4,4 +4,4 @@ param
     [String]
     $Language
 )
-Invoke-WebRequest "https://raw.githubusercontent.com/github/gitignore/master/$Language.gitignore" -OutFile ./.gitignore
+Invoke-WebRequest "https://raw.githubusercontent.com/github/gitignore/main/$Language.gitignore" -OutFile ./.gitignore
